@@ -1,0 +1,37 @@
+<template>
+  <v-bottom-navigation
+    v-model="bottomNav"
+    fixed
+  >
+    <v-btn 
+        value="home"
+        to="/"
+    >
+        <span>home</span>
+        <v-icon>mdi-home</v-icon>
+    </v-btn>
+
+    <v-btn 
+        value="cart"
+        to="/cart"
+    >
+      <span>Cart</span>
+      <v-icon>mdi-cart</v-icon>
+    </v-btn>
+
+    <v-btn
+        value="account"
+        to="/account"
+    >
+        <span>account</span>
+        <v-icon>mdi-account</v-icon>
+    </v-btn>
+  </v-bottom-navigation>
+</template>
+
+
+<script>
+  export default {
+    name: 'BottomNav'
+  }
+</script>
