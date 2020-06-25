@@ -14,7 +14,6 @@
 
 
   export default {
-    name: 'home',
     components: {
       ordercard: () => import('./ordercard'),
     },

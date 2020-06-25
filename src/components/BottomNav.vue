@@ -1,11 +1,10 @@
 <template>
   <v-bottom-navigation
-    v-model="bottomNav"
     fixed
   >
     <v-btn 
         value="home"
-        to="/"
+        to="/home"
     >
         <span>home</span>
         <v-icon>mdi-home</v-icon>
@@ -29,9 +28,3 @@
   </v-bottom-navigation>
 </template>
 
-
-<script>
-  export default {
-    name: 'BottomNav'
-  }
-</script>

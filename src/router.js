@@ -7,7 +7,12 @@ export default new Router({
   routes: [
     {
       path: '/',
-      component: () => import('./components/Main'),
+      redirect: '/home',
+    },
+    {
+      path: '/home',
+      name: 'home',
+      component: () => import('./components/Main')
     },
     {
       path: '/cart',
@@ -17,5 +22,9 @@ export default new Router({
       path: '/account',
       component: () => import('./components/Account'),
     },
+    {
+      path: "/menu",
+      component: () => import('./components/menu'), 
+    }
   ],
 })

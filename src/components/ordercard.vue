@@ -1,9 +1,9 @@
 <template>
-    <div>
-        <v-row class="mb-10">
+    <div class="ma-2 mb-15">
+        <v-row >
             <v-col cols="12" sm="6" md="4" lg="3" v-for="item in openorder" :key="item.id">
-                <v-card class="text-center ma-3">
-                <v-responsive class="pt-4">
+                <v-card class="text-center ">
+                <v-responsive class="pt-5">
                     <v-img
                     v-bind:src="require('../assets/' + item.type + '.jpg')"
                     max-height="125"
@@ -16,19 +16,29 @@
                     <v-chip class="mt-2">{{item.date}}</v-chip>
                 </v-card-text>
                 
-                <v-btn class="ma-2" @click="selectCard(item)" depressed color="primary">สั่งเลย</v-btn>
+                
+                <div  @click="selectCard(item)">
+                    <v-btn 
+                    to="/menu"
+                    class="mb-2" depressed color="primary"
+                    >
+                        สั่งเลย
+                    </v-btn>
+                </div>
+                
 
                 </v-card>
             </v-col>
         </v-row>
     </div>
-    
 </template>
 <script>
+// import { mapState } from 'Vuex'
+
 export default {
+    name: 'OrderCard',
     data() {
         return {
-            selectCardObject: undefined,
             openorder: [
                 {
                 id: 1,
@@ -59,8 +69,7 @@ export default {
     },
     methods: {
         selectCard: function(item) {
-            this.selectCardObject = item
-            console.log(this.selectCardObject)
+            this.$store.commit('SET_ORDERCARD', item)
         }
     }
 }
