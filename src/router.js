@@ -25,6 +25,10 @@ export default new Router({
     {
       path: "/menu",
       component: () => import('./components/menu'), 
+    },
+    {
+      path: "/address",
+      component: () => import('./components/Address')
     }
   ],
 })

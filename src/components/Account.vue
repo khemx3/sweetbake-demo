@@ -1,24 +1,16 @@
 <template>
-    <div> 
-      <ThailandAutoComplete v-model="district" />
-    </div> 
-</template> 
-
-<script> 
-import ThailandAutoComplete from 'vue-thailand-address-autocomplete'
-
-export default {
-    components: {
-        ThailandAutoComplete,
+    <div>
         
-    },
-    data () {
-    return {
-          district: '',
-          amphoe: '',
-          province: '',
-          zipcode: ''
+        <v-btn to="/address">address</v-btn>
+    </div>
+</template>
+
+<script>
+export default {
+    data() {
+        return {
+            
         }
-    }
+    },
 }
 </script>

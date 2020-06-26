@@ -7,9 +7,9 @@ export default new Vuex.Store({
   state: {
     ordercard: {
       id: 0,
-      name: "khem",
-      date: "1212",
-      type: "kerry",
+      name: "",
+      date: "",
+      type: "",
   }
   },
   mutations: {
