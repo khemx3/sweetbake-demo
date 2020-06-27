@@ -12,11 +12,11 @@ export default new Vuex.Store({
 			type: "",
 		},
 		address: {
-			address1: "aaa",
-			district: "",
-			amphoe: "",
-			province: "",
-			zipcode: "",
+			address1: "66/1023",
+			district: "บางเมือง",
+			amphoe: "เมืองสมุทรปราการ",
+			province: "สมุทรปราการ",
+			zipcode: "10270",
 		},
 	},
 	mutations: {
@@ -27,4 +27,7 @@ export default new Vuex.Store({
 			state.address = payload;
 		},
 	},
+	getters : {
+		addressDetail: state => state.name.address
+	}
 });
