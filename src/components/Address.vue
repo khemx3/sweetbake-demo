@@ -112,7 +112,15 @@ export default {
 			this.zipcode = "";
 		},
 		save() {
-			alert("save");
+			this.$store.commit("SET_ADDRESS", {
+				address: {
+					address1: "a",
+					district: this.district,
+					amphoe: this.amphoe,
+					province: this.province,
+					zipcode: this.zipcode,
+				},
+			});
 		},
 	},
 };

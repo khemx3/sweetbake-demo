@@ -1,5 +1,5 @@
 <template>
-    <div>
+    <div class="ma-5">
         <div>
             <p>{{orderselected.id}}</p>
             <p>{{orderselected.name}}</p>

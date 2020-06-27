@@ -1,20 +1,30 @@
-import Vue from 'vue'
-import Vuex from 'vuex'
+import Vue from "vue";
+import Vuex from "vuex";
 
-Vue.use(Vuex)
+Vue.use(Vuex);
 
 export default new Vuex.Store({
-  state: {
-    ordercard: {
-      id: 0,
-      name: "",
-      date: "",
-      type: "",
-  }
-  },
-  mutations: {
-    SET_ORDERCARD (state, payload) {
-      state.ordercard = payload
-    },
-  },
-})
+	state: {
+		ordercard: {
+			id: 0,
+			name: "",
+			date: "",
+			type: "",
+		},
+		address: {
+			address1: "aaa",
+			district: "",
+			amphoe: "",
+			province: "",
+			zipcode: "",
+		},
+	},
+	mutations: {
+		SET_ORDERCARD(state, payload) {
+			state.ordercard = payload;
+		},
+		SET_ADDRESS(state, payload) {
+			state.address = payload;
+		},
+	},
+});

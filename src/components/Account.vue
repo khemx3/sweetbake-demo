@@ -1,5 +1,5 @@
 <template>
-    <div>
+    <div class="ma-5">
         
         <v-btn to="/address">address</v-btn>
     </div>
