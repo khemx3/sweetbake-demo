@@ -4,7 +4,7 @@
   >
     <v-btn 
         value="home"
-        to="/home"
+        to="/"
     >
         <span>home</span>
         <v-icon>mdi-home</v-icon>

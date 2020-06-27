@@ -7,6 +7,7 @@ import ThailandAutoComplete from 'vue-thailand-address-autocomplete'
  
 Vue.component('ThailandAutoComplete', ThailandAutoComplete)
 
+Vue.prototype.$liff = window.liff
 Vue.config.productionTip = false
 
 new Vue({

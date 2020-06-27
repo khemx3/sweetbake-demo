@@ -36,7 +36,7 @@
 			</v-row>
       <v-row>
 						<div @click="clearOrder()">
-							<v-btn color="normal" to="/home"
+							<v-btn color="normal" to="/"
 								>ยกเลิกออเดอร์</v-btn
 							>
 						</div>
