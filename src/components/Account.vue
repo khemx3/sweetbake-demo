@@ -43,6 +43,7 @@
 					<v-card>
 						<v-card-text>
 							<v-card-title>ประวัติการสั่ง</v-card-title>
+							<history/>
 						</v-card-text>
 						<v-card-actions> </v-card-actions>
 					</v-card>
@@ -54,6 +55,9 @@
 
 <script>
 export default {
+	components: {
+      history: () => import('./History'),
+    },
 	data() {
 		return {
 			loading: false,
