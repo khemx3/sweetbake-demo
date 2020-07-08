@@ -26,6 +26,10 @@ export default new Router({
     {
       path: "/address",
       component: () => import('./components/Address')
+    },
+    {
+      path: "/upload/:orderId",
+      component: () => import('./components/upload')
     }
   ],
 })
