@@ -31,15 +31,15 @@
 					<v-btn color="primary" to="/menu">แก้ไขรายการ</v-btn>
 				</v-col>
 				<v-col>
-						<v-btn color="success" to="/payment">จ่ายเงิน</v-btn>
+					<dir @click="payment()">
+						<v-btn color="success">จ่ายเงิน</v-btn>
+					</dir>
 				</v-col>
 			</v-row>
-      <v-row>
-						<div @click="clearOrder()">
-							<v-btn color="normal" to="/"
-								>ยกเลิกออเดอร์</v-btn
-							>
-						</div>
+			<v-row>
+				<div @click="clearOrder()">
+					<v-btn color="normal" to="/">ยกเลิกออเดอร์</v-btn>
+				</div>
 			</v-row>
 		</div>
 	</div>
@@ -73,6 +73,65 @@ export default {
 					type: "",
 				},
 			});
+		},
+		payment: function() {
+			this.$liff
+				.sendMessages([
+					{
+						type: "bubble",
+						body: {
+							type: "box",
+							layout: "vertical",
+							contents: [
+								{
+									type: "text",
+									text: "ชำระด้วยการโอน",
+									weight: "bold",
+									size: "xl",
+									margin: "none",
+								},
+								{
+									type: "separator",
+									margin: "none",
+								},
+								{
+									type: "text",
+									text: "Order Number",
+									color: "#aaaaaa",
+								},
+								{
+									type: "text",
+									text: "#{{orderNumber}}",
+									weight: "bold",
+								},
+								{
+									type: "text",
+									text: "฿{{price}}",
+									size: "xl",
+									color: "#1CD053",
+									weight: "bold",
+									align: "start",
+								},
+								{
+									type: "image",
+									url:
+										"https://www.img.in.th/images/3ca436d3d7cd360282e016e8150ab050.png",
+									align: "start",
+									size: "sm",
+								},
+								{
+									type: "spacer",
+								},
+							],
+							spacing: "sm",
+						
+					
+						},
+					},
+				])
+				.then(() => {
+					this.$liff.closeWindow();
+				});
 		},
 	},
 	computed: {

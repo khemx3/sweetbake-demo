@@ -23,7 +23,7 @@ export default {
 		BottomNav: () => import("./components/BottomNav"),
 	},
 	beforeCreate() {
-    this.$liff.init({ liffId: "1654164440-rXE9o3Ly" })
+    this.$liff.init({ liffId: "1654423501-J2xEM1zY" })
     .then(() => {
       if (!this.$liff.isLoggedIn()) {
         this.$liff.login();
