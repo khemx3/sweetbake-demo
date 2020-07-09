@@ -2,16 +2,15 @@
     <div class="ma-2 mb-15">
         <v-row >
             <v-col cols="12" sm="6" md="4" lg="3" v-for="item in openorder" :key="item.id">
-                <v-card class="text-center ">
-                <v-responsive class="pt-5">
+                <v-card class="text-center " color="#b4a78d">
+                <v-responsive >
                     <v-img
-                    v-bind:src="require('../assets/' + item.type + '.jpg')"
-                    max-height="125"
+                    :src=item.url
                     class="grey darken-4"
                     ></v-img>
                 </v-responsive>
                 <v-card-text>
-                    <div class="text-subtitle-1 ">{{item.name}}</div>
+                    <div class="text-h6 ">{{item.name}}</div>
                     <!-- <div class="black--text">{{item.type}}</div> -->
                     <v-chip class="mt-2">{{item.date}}</v-chip>
                 </v-card-text>
@@ -42,27 +41,18 @@ export default {
             openorder: [
                 {
                 id: 1,
-                name: 'รอบ วันที่ 24 มิถุนายน 2020',
-                date: 'Wed, 24 june',
-                type: 'kerry',
+                name: 'Nutella Brownies',
+                url: 'https://www.img.in.th/images/1c84cdcb4935c6eb6c7c7501055d170d.jpg'
                 },
                 {
                 id: 2,
-                name: 'รอบ วันที่ 25 มิถุนายน 2020',
-                date: 'Thu, 25 june',
-                type: 'grab'
+                name: 'Nutella Cup',
+                url: 'https://www.img.in.th/images/541999340d24c09282bc9130d2c78752.jpg'
                 },
                 {
                 id: 3,
-                name: 'รอบ วันที่ 26 มิถุนายน 2020',
-                date: 'Fri, 26 june',
-                type: 'kerry'
-                },
-                {
-                id: 4,
-                name: 'รอบ วันที่ 27 มิถุนายน 2020',
-                date: 'Sat, 27 june',
-                type: 'grab'
+                name: 'Combo Set',
+                url: 'https://www.img.in.th/images/6be5c9719af116c54434c91f071b6c06.jpg'
                 }
             ]
         }
@@ -74,3 +64,10 @@ export default {
     }
 }
 </script>
+
+<style >
+    img { 
+    width:100%; 
+    height:100%; 
+    } 
+</style>
