@@ -18,6 +18,12 @@ export default new Vuex.Store({
 			province: "",
 			zipcode: "",
 		},
+		profile: {
+			userId: "",
+			displayName: "",
+			pictureUrl: "",
+			statusMessage: "",
+		},
 	},
 	mutations: {
 		SET_ORDERCARD(state, payload) {
@@ -26,5 +32,8 @@ export default new Vuex.Store({
 		SET_ADDRESS(state, payload) {
 			state.address = payload;
 		},
+		SET_LINEUSER(state, payload) {
+			state.profile = payload
+		}
 	},
 });

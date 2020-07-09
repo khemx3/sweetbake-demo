@@ -1,8 +1,9 @@
 <template>
-    <p>{{$route.params.orderId}}</p>
+	<p>{{ $route.params.orderId }}</p>
 </template>
 
 <script>
 export default {
-}
+	
+};
 </script>
