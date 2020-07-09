@@ -85,5 +85,6 @@ export default {
 		userAddress() {
 			return this.$store.state.address;
 		},
-	},
+    },
+}
 </script>
