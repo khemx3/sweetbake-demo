@@ -6,7 +6,7 @@
         value="home"
         to="/"
     >
-        <span>home</span>
+        <span>order</span>
         <v-icon>mdi-home</v-icon>
     </v-btn>
 

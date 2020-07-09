@@ -75,10 +75,16 @@
 				</v-col>
 			</v-row>
 			<div>
-				<v-btn @click="save()" color="success"> บันทึก </v-btn>
-				<v-btn @click="clearAddress()" class="mx-2" color="error">
-					ลบที่อยู่
-				</v-btn>
+				<v-row>
+					<div @click="save()">
+						<v-btn  to="/account" color="success"> บันทึก </v-btn>
+					</div>
+					<div>
+						<v-btn @click="clearAddress()" class="mx-2" color="error">
+						ลบที่อยู่
+					</v-btn>
+					</div>
+				</v-row>
 			</div>
 		</div>
 	</div>
@@ -114,7 +120,7 @@ export default {
 		save() {
 			this.$store.commit("SET_ADDRESS", {
 				address: {
-					address1: "a",
+					address1: this.address1,
 					district: this.district,
 					amphoe: this.amphoe,
 					province: this.province,
