@@ -1,46 +1,86 @@
 <template>
 	<div class="pb-10 mb-5 ma-5">
 		<div>
-			<h1>สรุปรายการขนม</h1>
-			<p>{{ orderselected.name }}</p>
-			<p>{{ userAddress.address1 }}</p>
+			<v-img
+				src="https://www.img.in.th/images/50f1997638d90dd66cf2ce006979990b.jpg"
+			></v-img>
+			<div>
+				<v-simple-table>
+					<template v-slot:default>
+						<thead>
+							<tr>
+								<th class="text-left">รายการ</th>
+								<th class="text-left">จำนวน</th>
+								<th class="text-left">ราคา</th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr v-for="item in menus" :key="item.id">
+								<td>{{ item.name }}</td>
+								<td>{{ item.count }}</td>
+								<td> - </td>
+							</tr>
+							<tr class="justify-center">
+								<td>ค่าขนมรวม(ไม่รวมค่าส่ง)</td>
+								<td></td>
+								<td>-</td>
+							</tr>
+						</tbody>
+					</template>
+				</v-simple-table>
+			</div>
+			<div>
+				<v-row class="align-center">
+					<v-col>
+						<v-btn color="primary" to="/">แก้ไขรายการ</v-btn>
+					</v-col>
+					<v-col>
+						<dir @click="payment()">
+							<v-btn color="success">เลือกรอบ</v-btn>
+						</dir>
+					</v-col>
+				</v-row>
+				<v-row>
+					<div @click="dialog = true">
+						<v-btn color="normal">ยกเลิกออเดอร์</v-btn>
+					</div>
+				</v-row>
+			</div>
 		</div>
 		<div>
-			<v-simple-table>
-				<template v-slot:default>
-					<thead>
-						<tr>
-							<th class="text-left">รายการ</th>
-							<th class="text-left">จำนวน</th>
-							<th class="text-left">ราคา</th>
-						</tr>
-					</thead>
-					<tbody>
-						<tr v-for="item in desserts" :key="item.name">
-							<td>{{ item.name }}</td>
-							<td>{{ item.quantity }}</td>
-							<td>{{ item.price }}</td>
-						</tr>
-					</tbody>
-				</template>
-			</v-simple-table>
-		</div>
-		<div>
-			<v-row class="align-center">
-				<v-col>
-					<v-btn color="primary" to="/menu">แก้ไขรายการ</v-btn>
-				</v-col>
-				<v-col>
-					<dir @click="payment()">
-						<v-btn color="success">จ่ายเงิน</v-btn>
-					</dir>
-				</v-col>
-			</v-row>
-			<v-row>
-				<div @click="clearOrder()">
-					<v-btn color="normal" to="/">ยกเลิกออเดอร์</v-btn>
-				</div>
-			</v-row>
+			<v-dialog v-model="dialog">
+				<v-card>
+					<v-card-title class="headline"
+						>ต้องการลบ</v-card-title
+					>
+
+					<v-card-text>
+						Let Google help apps determine location. This means
+						sending anonymous location data to Google, even when no
+						apps are running.
+					</v-card-text>
+
+					<v-card-actions>
+						<v-spacer></v-spacer>
+
+						<v-btn
+							color="green darken-1"
+							text
+							@click="dialog = false"
+						>
+							ยกเลิก
+						</v-btn>
+
+						<v-btn
+							color="green darken-1"
+							text
+							@click="clearOrder()"
+						>
+							ยืนยัน
+						</v-btn>
+					</v-card-actions>
+				</v-card>
+			</v-dialog>
 		</div>
 	</div>
 </template>
@@ -49,32 +89,15 @@
 export default {
 	data() {
 		return {
-			desserts: [
-				{
-					name: "Frozen Yogurt",
-					quantity: 1,
-					price: 200,
-				},
-				{
-					name: "Frozen ass",
-					quantity: 2,
-					price: 200,
-				},
-			],
-		};
+			dialog: false
+		}
 	},
 	methods: {
-		clearOrder: function() {
-			this.$store.commit("SET_ORDERCARD", {
-				ordercard: {
-					id: 0,
-					name: "",
-					date: "",
-					type: "",
-				},
-			});
+		clearOrder() {
+			this.$store.commit("CLEAR_CART");
+			this.dialog = false
 		},
-		payment: function() {
+		payment() {
 			this.$liff
 				.sendMessages([
 					{
@@ -124,8 +147,6 @@ export default {
 								},
 							],
 							spacing: "sm",
-						
-					
 						},
 					},
 				])
@@ -140,6 +161,9 @@ export default {
 		},
 		userAddress() {
 			return this.$store.state.address;
+		},
+		menus() {
+			return this.$store.state.cart;
 		},
 	},
 };

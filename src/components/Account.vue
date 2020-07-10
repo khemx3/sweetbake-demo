@@ -19,20 +19,7 @@
 								label="Line name"
 							>
 							</v-text-field>
-
-							<v-col class="ma-0 pa-0">
-								<v-text-field
-									:value="addresstext"
-									label="ที่อยู่"
-									readonly
-								></v-text-field>
-							</v-col>
 						</v-card-text>
-						<v-card-actions>
-							<v-btn to="/address" color="primary">
-								แก้ไขที่อยู่
-							</v-btn>
-						</v-card-actions>
 					</v-card>
 				</v-layout>
 			</v-container>
@@ -43,7 +30,7 @@
 					<v-card>
 						<v-card-text>
 							<v-card-title>ประวัติการสั่ง</v-card-title>
-							<history/>
+							<history />
 						</v-card-text>
 						<v-card-actions> </v-card-actions>
 					</v-card>
@@ -56,8 +43,8 @@
 <script>
 export default {
 	components: {
-      history: () => import('./History'),
-    },
+		history: () => import("./History"),
+	},
 	data() {
 		return {
 			loading: false,
@@ -67,24 +54,28 @@ export default {
 			showAvatarPicker: false,
 			addresstext: "",
 		};
-    },
-    methods: {
-        getAddressInfo() {
-            this.addresstext =
-            this.userAddress.address1 + " " + 
-            this.userAddress.district + " " + 
-            this.userAddress.amphoe + " " + 
-            this.userAddress.province + " " + 
-            this.userAddress.zipcode;
-        }
-    },
-    computed: {
-        userprofile() {
+	},
+	methods: {
+		getAddressInfo() {
+			this.addresstext =
+				this.userAddress.address1 +
+				" " +
+				this.userAddress.district +
+				" " +
+				this.userAddress.amphoe +
+				" " +
+				this.userAddress.province +
+				" " +
+				this.userAddress.zipcode;
+		},
+	},
+	computed: {
+		userprofile() {
 			return this.$store.state.profile;
 		},
 		userAddress() {
 			return this.$store.state.address;
 		},
-    },
-}
+	},
+};
 </script>
