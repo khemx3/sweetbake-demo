@@ -10,12 +10,12 @@
 									size="96"
 									class="justify-center align-center"
 								>
-									<img src="" />
+									<img :src=this.$store.state.profile.pictureUrl />
 								</v-avatar>
 							</v-flex>
 							<v-text-field
 								readonly
-								v-model="form.firstName"
+								v-model="this.$store.state.profile.displayName"
 								label="Line name"
 							>
 							</v-text-field>
@@ -51,30 +51,12 @@ export default {
 			form: {
 				firstName: "John",
 			},
-			showAvatarPicker: false,
-			addresstext: "",
 		};
-	},
-	methods: {
-		getAddressInfo() {
-			this.addresstext =
-				this.userAddress.address1 +
-				" " +
-				this.userAddress.district +
-				" " +
-				this.userAddress.amphoe +
-				" " +
-				this.userAddress.province +
-				" " +
-				this.userAddress.zipcode;
-		},
+
 	},
 	computed: {
 		userprofile() {
 			return this.$store.state.profile;
-		},
-		userAddress() {
-			return this.$store.state.address;
 		},
 	},
 };
