@@ -77,7 +77,7 @@
 			<div>
 				<v-row>
 					<div @click="save()">
-						<v-btn  to="/account" color="success"> บันทึก </v-btn>
+						<v-btn  to="/cart" color="success"> บันทึก </v-btn>
 					</div>
 					<div>
 						<v-btn @click="clearAddress()" class="mx-2" color="error">
@@ -94,13 +94,14 @@
 export default {
 	data() {
 		return {
-			name: "ภัคพล จือเหลียง",
-			contact: "0882024221",
-			address1: "66/1023",
-			district: "บางเมือง",
-			amphoe: "เมืองสมุทรปราการ",
-			province: "สมุทรปราการ",
-			zipcode: "10270",
+			dataAddress: "",
+			name: this.$store.state.address.name,
+			contact: this.$store.state.address.contact,
+			address1: this.$store.state.address.address1,
+			district: this.$store.state.address.district,
+			amphoe: this.$store.state.address.amphoe,
+			province: this.$store.state.address.province,
+			zipcode: this.$store.state.address.zipcode,
 		};
 	},
 	methods: {
@@ -110,25 +111,25 @@ export default {
 			this.province = address.province;
 			this.zipcode = address.zipcode;
 		},
-		clearAddress() {
-			this.address1 = "";
-			this.district = "";
-			this.amphoe = "";
-			this.province = "";
-			this.zipcode = "";
-		},
 		save() {
 			this.$store.commit("SET_ADDRESS", {
-				address: {
-					address1: this.address1,
-					district: this.district,
-					amphoe: this.amphoe,
-					province: this.province,
-					zipcode: this.zipcode,
-				},
+				name: this.name,
+				contact: this.contact,
+				address1: this.address1,
+				district: this.district,
+				amphoe: this.amphoe,
+				province: this.province,
+				zipcode: this.zipcode
 			});
 		},
+		getDataAddress() {
+			this.dataAddress = this.$store.state.address
+		}
 	},
+	mounted() {
+		this.getDataAddress()
+	}
+	
 };
 </script>
 

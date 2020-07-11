@@ -5,14 +5,9 @@ Vue.use(Vuex);
 
 export default new Vuex.Store({
 	state: {
-		ordercard: {
-			id: 0,
-			name: "",
-			date: "",
-			type: "",
-		},
 		address: {
 			name: "",
+			contact: "",
 			address1: "",
 			district: "",
 			amphoe: "",
@@ -25,6 +20,7 @@ export default new Vuex.Store({
 			pictureUrl: "",
 			statusMessage: "",
 		},
+		lockingOrder: false,
 		menu: [
 			{
 				id: 1,
@@ -49,9 +45,6 @@ export default new Vuex.Store({
 		cart: []
 	},
 	mutations: {
-		SET_ORDERCARD(state, payload) {
-			state.ordercard = payload;
-		},
 		SET_ADDRESS(state, payload) {
 			state.address = payload;
 		},
@@ -78,7 +71,10 @@ export default new Vuex.Store({
 			state.menu.forEach(item => {
 				item.count = 0
 			});
-		}
+		},
+		changeLockOrderState(state, status) {
+			state.lockingOrder = status
+		},
 	},
 	getters: {
 		addressDetail: (state) => state.name.address,
