@@ -6,7 +6,7 @@
 			></v-img>
 		</div>
 
-		<ordercard />
+		<ordercard class="justify-center"/>
 	</div>
 </template>
 
@@ -29,22 +29,22 @@ export default {
 		ordercard: () => import("./ordercard"),
 	},
 	beforeCreate() {
-		this.$liff
-			.init({ liffId: "1654423501-J2xEM1zY" })
-			.then(() => {
-				this.$liff.ready.then(() => {
-					if (!this.$liff.isLoggedIn()) {
-						this.$liff.login();
-						this.getProfile();
-					} else {
-						this.getProfile();
-					}
-				});
-			})
-			.catch(function(err) {
-				// eslint-disable-next-line no-console
-				console.log("Error is: " + err);
-			});
+		// this.$liff
+		// 	.init({ liffId: "1654423501-J2xEM1zY" })
+		// 	.then(() => {
+		// 		this.$liff.ready.then(() => {
+		// 			if (!this.$liff.isLoggedIn()) {
+		// 				this.$liff.login();
+		// 				this.getProfile();
+		// 			} else {
+		// 				this.getProfile();
+		// 			}
+		// 		});
+		// 	})
+		// 	.catch(function(err) {
+		// 		// eslint-disable-next-line no-console
+		// 		console.log("Error is: " + err);
+		// 	});
 	},
 	methods: {
 		getProfile() {

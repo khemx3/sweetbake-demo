@@ -20,10 +20,6 @@ export default new Router({
       component: () => import('./components/Account'),
     },
     {
-      path: "/menu",
-      component: () => import('./components/menu'), 
-    },
-    {
       path: "/address",
       component: () => import('./components/Address')
     },

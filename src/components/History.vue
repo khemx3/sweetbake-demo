@@ -6,15 +6,14 @@
 					<thead>
 						<tr>
 							<th class="text-left ">หมายเลขออเดอร์</th>
-							<th class="text-left">รูปแบบการส่ง</th>
 							<th class="text-left">สถานะการจ่ายเงิน</th>
 							<th class="text-left">รายละเอียด</th>
 						</tr>
 					</thead>
 					<tbody>
-						<tr v-for="item in desserts" :key="item.name">
+						<tr v-for="item in history" :key="item.name">
 							<td>#{{ item.name }}</td>
-							<td>{{ item.calories }}</td>
+							
 							<td>
 								<v-chip
 									:class="colorClass(item.state)"
@@ -76,15 +75,13 @@
 export default {
 	data: () => ({
 		dialog: false,
-		desserts: [
+		history: [
 			{
 				name: "0000001",
-				calories: "kerry",
 				state: "pending",
 			},
 			{
 				name: "0000002",
-				calories: "messenger",
 				state: "success",
 			},
 		],

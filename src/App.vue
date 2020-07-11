@@ -1,5 +1,5 @@
 <template>
-	<v-app id="app">
+	<v-app id="app" :style="myStyle">
 		<router-view />
 		<bottomNav />
 	</v-app>
@@ -10,7 +10,9 @@ export default {
 	name: "App",
 	data() {
 		return {
-			
+			myStyle: {
+				backgroundColor: "#C9BC9C",
+			},
 		};
 	},
 	components: {
