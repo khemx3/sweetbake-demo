@@ -50,6 +50,7 @@
 							label="รอบส่ง"
 							outlined
 							solo
+							@change="addRound"
 						></v-combobox>
 					</v-row>
 					<v-btn
@@ -60,15 +61,22 @@
 					>
 				</v-container>
 			</div>
-			<div v-if="lockOrderStatus">
+			<div v-if="islock">
 				<v-card>
 					<div v-if="checkMessengerRound">
 						<v-radio-group v-model="row" row>
-							<v-radio
-								label="ส่งแมสเซนเจอร์"
-								value="radio-1"
-							></v-radio>
-							<v-radio label="นัดรับ" value="radio-2"></v-radio>
+							<div @click="notpickUpState">
+								<v-radio
+									label="ส่งแมสเซนเจอร์"
+									value="radio-1"
+								></v-radio>
+							</div>
+							<div @click="pickUpState">
+								<v-radio
+									label="นัดรับ"
+									value="radio-2"
+								></v-radio>
+							</div>
 						</v-radio-group>
 
 						<v-container>
@@ -82,14 +90,17 @@
 							</v-row>
 						</v-container>
 					</div>
-					<v-btn to="/address">ที่อยู่</v-btn>
-					<p>{{ userAddress.name }} {{ userAddress.contact }}</p>
-					<p>
-						{{ userAddress.address1 }} {{ userAddress.district }}
-						{{ userAddress.amphoe }} {{ userAddress.province }}
-						{{ userAddress.zipcode }}
-					</p>
-					<div v-if="checkBangkokLocation">Bangkok send</div>
+					<div v-if="!isPickUp" class="mx-auto pt-5">
+						<v-btn to="/address">ที่อยู่</v-btn>
+						<p>{{ userAddress.name }} {{ userAddress.contact }}</p>
+						<p>
+							{{ userAddress.address1 }}
+							{{ userAddress.district }} {{ userAddress.amphoe }}
+							{{ userAddress.province }}
+							{{ userAddress.zipcode }}
+						</p>
+						<div v-if="checkBangkokLocation">Bangkok send</div>
+					</div>
 					<div></div>
 				</v-card>
 				<v-btn>จ่ายเงิน</v-btn>
@@ -135,6 +146,7 @@
 					<v-card-text>
 						{{ selectRound.id }}
 						{{ selectRound.name }}
+						{{ islock }}
 						<v-btn @click="lockOrder">lock </v-btn>
 						<v-btn @click="unlockOrder"> unlock</v-btn>
 					</v-card-text>
@@ -165,13 +177,16 @@
 </template>
 
 <script>
+import axios from '@/axios';
+
 export default {
 	data() {
 		return {
+			cart: "",
 			dialog: false,
 			dialog2: false,
 			isMessenger: true,
-			selectRound: "",
+			selectRound: this.$store.state.round,
 			selectDropOff: "",
 			row: "radio-1",
 			round: [
@@ -196,8 +211,7 @@ export default {
 					name: "siam (seoulcial club) 13:45-14:30",
 				},
 			],
-			lockOrderStatus: false,
-			// lockOrderStatus: this.$store.state.lockOrder
+			lockOrderStatus: this.$store.state.lockOrder,
 		};
 	},
 	components: {},
@@ -212,28 +226,70 @@ export default {
 		},
 		unlockOrder() {
 			this.lockOrderStatus = false;
-			this.$store.commit("changeLockOrderState", true);
+			this.$store.commit("changeLockOrderState", false);
 		},
+		addRound() {
+			this.$store.commit("SET_ROUND", this.selectRound);
+			// eslint-disable-next-line no-console
+			console.log(this.selectRound);
+		},
+		pickUpState() {
+			// eslint-disable-next-line no-console
+			console.log("pickup");
+			this.$store.commit("SET_PICKUP", true);
+		},
+		notpickUpState() {
+			// eslint-disable-next-line no-console
+			console.log("not pickup");
+			this.$store.commit("SET_PICKUP", false);
+		},
+		getCart() {
+			axios.get(axios.baseURL, {
+			// eslint-disable-next-line no-unused-vars
+			} ).then((response) => {
+				this.$loading.hide()
+				// eslint-disable-next-line no-console
+				console.log(response)
+			}, (error) => {
+				// eslint-disable-next-line no-console
+				console.log(error);
+			});
+		}
 	},
 	computed: {
-		orderselected() {
-			return this.$store.state.ordercard;
-		},
 		userAddress() {
 			return this.$store.state.address;
 		},
 		menus() {
 			return this.$store.state.cart;
 		},
+		islock() {
+			return this.$store.state.lockingOrder;
+		},
 		checkSelectRound() {
 			return this.selectRound == "";
 		},
 		checkBangkokLocation() {
-			return this.$store.state.address.province == "กรุงเทพมหานคร"
+			return this.$store.state.address.province == "กรุงเทพมหานคร";
 		},
 		checkMessengerRound() {
-			return this.selectRound.type == "messenger"
-		}
+			return this.selectRound.type == "messenger";
+		},
+		roundSelected() {
+			return this.$store.state.round;
+		},
+		isPickUp() {
+			return this.$store.state.pickup;
+		},
+	},
+	mounted() {
+		this.getCart()
+	},
+	// eslint-disable-next-line no-unused-vars
+	beforeRouteEnter (to, from, next) {
+	// eslint-disable-next-line no-console
+	if(from.name == 'home') console.log("enter cart")
+	next(true)
 	},
 };
 </script>

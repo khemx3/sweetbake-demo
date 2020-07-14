@@ -6,11 +6,13 @@
 			></v-img>
 		</div>
 
-		<ordercard class="justify-center"/>
+		<ordercard class="justify-center" />
 	</div>
 </template>
 
 <script>
+import axios from "@/axios";
+
 export default {
 	data() {
 		return {
@@ -57,10 +59,26 @@ export default {
 				.catch(function(error) {
 					alert("Error getting profile: " + error);
 				});
-		},
+    },
+    updateCart() {
+      // eslint-disable-next-line no-console
+      console.log('leaving home')
+    }
 	},
 	updated() {
 		this.$store.commit("SET_LINEUSER", this.profile);
+	},
+	mounted() {
+	},
+	// eslint-disable-next-line no-unused-vars
+	beforeRouteLeave(to, from, next) {
+		// eslint-disable-next-line no-console
+    if(to.name == 'cart'){
+      this.updateCart();
+      this.$loading.show({background: '#444'}) 
+
+    }
+    next(true)
 	},
 };
 </script>

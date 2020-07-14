@@ -31,12 +31,13 @@
 							<div class="black--text"></div>
 						</v-card-text>
 
-						<div @click="selectCard(item)">
+						<div>
 							<v-btn
 								class="mb-2 white--text"
 								depressed
 								color="brown"
 								:disabled="item.count == 0"
+								@click="selectCard(item)"
 							>
 								เพิ่มใส่ตะกร้า
 							</v-btn>
