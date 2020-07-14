@@ -5,9 +5,8 @@
 				src="https://www.img.in.th/images/e885984d07530fe69ca7f954aa62a079.jpg"
 			></v-img>
 		</div>
-
-		<ordercard class="justify-center"/>
-		<p class="text--disabled">{{profile.userId}}</p>
+		<p class="text--disabled">{{ profile.userId }}</p>
+		<ordercard class="justify-center" />
 	</div>
 </template>
 
@@ -24,6 +23,7 @@ export default {
 			myStyle: {
 				backgroundColor: "#C9BC9C",
 			},
+			access: "",
 		};
 	},
 	components: {
@@ -37,8 +37,10 @@ export default {
 					if (!this.$liff.isLoggedIn()) {
 						this.$liff.login();
 						this.getProfile();
+						this.getAccessToken();
 					} else {
 						this.getProfile();
+						this.getAccessToken();
 					}
 				});
 			})
@@ -59,13 +61,18 @@ export default {
 					alert("Error getting profile: " + error);
 				});
 		},
+		getAccessToken() {
+			this.access = this.$liff.getAccessToken();
+			// eslint-disable-next-line no-console
+			console.log(this.access);
+		},
 	},
 	updated() {
+		
 		this.$store.commit("SET_LINEUSER", this.profile);
 	},
 	mounted() {
-		this.updated()
-	}
+
+	},
 };
 </script>
-
