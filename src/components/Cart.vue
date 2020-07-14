@@ -6,65 +6,25 @@
 			></v-img>
 		</div>
 		<div class="pb-10 mb-5 ma-5">
-			<div>
-				<v-simple-table>
-					<template v-slot:default>
-						<thead>
-							<tr>
-								<th class="text-left">รายการ</th>
-								<th class="text-left">จำนวน</th>
-								<th class="text-left">ราคา</th>
-							</tr>
-						</thead>
-						<tbody>
-							<tr v-for="item in menus" :key="item.id">
-								<td>{{ item.name }}</td>
-								<td>{{ item.count }}</td>
-								<td>-</td>
-							</tr>
-							<tr class="justify-center">
-								<td>ค่าขนมรวม(ไม่รวมค่าส่ง)</td>
-								<td></td>
-								<td>-</td>
-							</tr>
-						</tbody>
-					</template>
-				</v-simple-table>
-			</div>
-			<div>
-				<v-col>
-					<v-btn color="primary" to="/">แก้ไขรายการ</v-btn>
-
-					<v-btn @click="dialog = true" color="normal"
-						>ล้างรายการ</v-btn
-					>
-				</v-col>
-			</div>
-			<div>
-				<v-container>
-					<v-row>
-						<v-combobox
-							v-model="selectRound"
-							:items="round"
-							item-text="name"
-							label="รอบส่ง"
-							outlined
-							solo
-							@change="addRound"
-						></v-combobox>
-					</v-row>
-					<v-btn
-						:disabled="checkSelectRound"
-						@click="dialog2 = true"
-						color="normal"
-						>จองรอบ</v-btn
-					>
-				</v-container>
-			</div>
+			<v-container>
+				<v-row>
+					<v-combobox
+						v-model="selectRound"
+						:items="round"
+						item-text="name"
+						label="รอบส่ง"
+						outlined
+						solo
+						@change="addRound"
+					></v-combobox>
+				</v-row>
+			</v-container>
+			
+			<div></div>
 			<div v-if="islock">
 				<v-card>
 					<div v-if="checkMessengerRound">
-						<v-radio-group v-model="row" row>
+						<v-radio-group v-model="row" row class="mx-2">
 							<div @click="notpickUpState">
 								<v-radio
 									label="ส่งแมสเซนเจอร์"
@@ -82,6 +42,7 @@
 						<v-container>
 							<v-row>
 								<v-combobox
+									class="mx-2"
 									v-model="selectDropOff"
 									:items="pickup"
 									item-text="name"
@@ -90,20 +51,23 @@
 							</v-row>
 						</v-container>
 					</div>
-					<div v-if="!isPickUp" class="mx-auto pt-5">
-						<v-btn to="/address">ที่อยู่</v-btn>
-						<p>{{ userAddress.name }} {{ userAddress.contact }}</p>
+					<div v-if="!isPickUp" class="mx-auto">
+						<v-btn to="/address" class="ma-5 px-10">ที่อยู่</v-btn>
+						<div class="mx-5">
+							<p>{{ userAddress.name }} {{ userAddress.contact }}</p>
 						<p>
 							{{ userAddress.address1 }}
 							{{ userAddress.district }} {{ userAddress.amphoe }}
 							{{ userAddress.province }}
 							{{ userAddress.zipcode }}
 						</p>
+						</div>
+						
 						<div v-if="checkBangkokLocation">Bangkok send</div>
 					</div>
 					<div></div>
 				</v-card>
-				<v-btn>จ่ายเงิน</v-btn>
+				<v-btn  to="/checkout" class="pa-auto mt-5">ยอดสรุป</v-btn>
 			</div>
 		</div>
 
@@ -177,11 +141,12 @@
 </template>
 
 <script>
-import axios from '@/axios';
+import axios from "@/axios";
 
 export default {
 	data() {
 		return {
+			menusList: "",
 			cart: "",
 			dialog: false,
 			dialog2: false,
@@ -189,10 +154,7 @@ export default {
 			selectRound: this.$store.state.round,
 			selectDropOff: "",
 			row: "radio-1",
-			round: [
-				{ name: "kerry 1/1/1", id: 1, type: "kerry" },
-				{ name: "messager 2/2/2", id: 2, type: "messenger" },
-			],
+			round: [],
 			pickup: [
 				{
 					id: 1,
@@ -211,7 +173,7 @@ export default {
 					name: "siam (seoulcial club) 13:45-14:30",
 				},
 			],
-			lockOrderStatus: this.$store.state.lockOrder,
+			lockOrderStatus: false,
 		};
 	},
 	components: {},
@@ -229,9 +191,10 @@ export default {
 			this.$store.commit("changeLockOrderState", false);
 		},
 		addRound() {
+			// this.$loading.show({ background: "#a68765" });
 			this.$store.commit("SET_ROUND", this.selectRound);
-			// eslint-disable-next-line no-console
-			console.log(this.selectRound);
+			this.lockOrder();
+		
 		},
 		pickUpState() {
 			// eslint-disable-next-line no-console
@@ -243,18 +206,27 @@ export default {
 			console.log("not pickup");
 			this.$store.commit("SET_PICKUP", false);
 		},
-		getCart() {
-			axios.get(axios.baseURL, {
-			// eslint-disable-next-line no-unused-vars
-			} ).then((response) => {
-				this.$loading.hide()
+		modifyCart() {},
+		getRound() {
+			axios
+				.get(
+					"https://asia-east2-sweetbake-backend.cloudfunctions.net/api/round/",
+					{
+						headers: {
+							"Content-Type": "application/json",
+							Authorization:
+								"Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiYWRtaW4iLCJyb2xlcyI6ImFkbWluIiwiaWF0IjoxNTk0NzM3MDU1LCJleHAiOjE1OTQ4MjM0NTV9.yMm3XjLjMfRjfB2VP2z_CsDTV-tdIE_ACofh_iu16bY",
+						},
+					}
+				)
 				// eslint-disable-next-line no-console
-				console.log(response)
-			}, (error) => {
-				// eslint-disable-next-line no-console
-				console.log(error);
-			});
-		}
+				.then(
+					(response) => (
+						(this.round = response.data.rounds),
+						this.$loading.hide()
+					)
+				);
+		},
 	},
 	computed: {
 		userAddress() {
@@ -282,14 +254,15 @@ export default {
 			return this.$store.state.pickup;
 		},
 	},
-	mounted() {
-		this.getCart()
+	created() {
+		this.$loading.show({ background: "#a68765" });
+		this.getRound();
 	},
 	// eslint-disable-next-line no-unused-vars
-	beforeRouteEnter (to, from, next) {
-	// eslint-disable-next-line no-console
-	if(from.name == 'home') console.log("enter cart")
-	next(true)
+	beforeRouteEnter(to, from, next) {
+		// eslint-disable-next-line no-console
+		if (from.name == "home") console.log("enter cart");
+		next(true);
 	},
 };
 </script>

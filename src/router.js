@@ -27,6 +27,11 @@ const router = new Router({
 			component: () => import("./components/Address"),
 		},
 		{
+			path: "/checkout",
+			name: "checkout",
+			component: () => import("./components/Checkout"),
+		},
+		{
 			path: "/upload/:orderId",
 			component: () => import("./components/upload"),
 		},

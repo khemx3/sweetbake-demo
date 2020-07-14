@@ -29,21 +29,21 @@ export default new Vuex.Store({
 		pickup: false,
 		menu: [
 			{
-				id: 1,
+				id: "7btee1m7i",
 				name: "Nutella Brownies",
 				count: 0,
 				url:
 					"https://www.img.in.th/images/1c84cdcb4935c6eb6c7c7501055d170d.jpg",
 			},
 			{
-				id: 2,
+				id: "sorq6ezsm",
 				name: "Nutella Cup",
 				url:
 					"https://www.img.in.th/images/541999340d24c09282bc9130d2c78752.jpg",
 				count: 0,
 			},
 			{
-				id: 3,
+				id: "9vqkg6f1l",
 				name: "Combo Set",
 				url:
 					"https://www.img.in.th/images/6be5c9719af116c54434c91f071b6c06.jpg",
