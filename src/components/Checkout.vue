@@ -52,7 +52,7 @@
 			<v-row>
 				<v-btn color="primary" to="/">แก้ไขรายการ</v-btn>
 				<v-btn color="primary" to="/cart">ย้อนกลับ</v-btn>
-				<v-btn @click="test" color="primary">ยืนยันการสั่ง</v-btn>
+				<v-btn @click="confirm" color="primary">ยืนยันการสั่ง</v-btn>
 			</v-row>
 		</div>
 	</div>
@@ -65,11 +65,24 @@ export default {
 	data() {
 		return {
 			menusList: "",
+			orderId: "",
 		};
 	},
 	methods: {
-        // eslint-disable-next-line no-console
-        test() {console.log(this.$store.state.accessToken)},
+		// eslint-disable-next-line no-console
+		confirm() {
+			axios
+				.post(this.$store.state.url + "/checkout", {},{
+					headers: {
+						Authorization:
+							"Bearer " + this.$store.state.accessToken,
+					},
+				})
+				.then((response) => {
+					this.orderId = response.data.order_id;
+					this.payment();
+				});
+		},
 		getCart() {
 			axios
 				.get(
@@ -77,7 +90,7 @@ export default {
 					{
 						headers: {
 							Authorization:
-								"Bearer " + this.$store.state.accessToken ,
+								"Bearer " + this.$store.state.accessToken,
 						},
 					}
 				)
@@ -92,26 +105,28 @@ export default {
 				);
 		},
 		payment() {
-			axios.post(
-				"https://asia-east2-sweetbake-liff.cloudfunctions.net/checkOutOrder",
-				{
-					userId: "U6c524d2dbe821532b222ad2e542779b8",
-					orderId: "000001",
-					price: "199",
-				},
-				{
-					headers: {
-                        "content-type": "application/json",
+			axios
+				.post(
+					"https://asia-east2-sweetbake-liff.cloudfunctions.net/checkOutOrder",
+					{
+						userId: this.$store.state.profile.userId,
+						orderId: this.orderId,
+						price: this.menusList.amount,
 					},
-				}
-			);
+					{
+						headers: {
+							"content-type": "application/json",
+						},
+					}
+				)
+				.then(() => this.$liff.closeWindow());
 		},
-    },
-    computed: {
-        checkMessengerRound(){
+	},
+	computed: {
+		checkMessengerRound() {
 			return this.$store.state.round.type == "messenger";
-		}
-    },
+		},
+	},
 	created() {
 		this.$loading.show({ background: "#a68765" });
 		this.getCart();

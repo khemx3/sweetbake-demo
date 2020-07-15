@@ -6,6 +6,7 @@ Vue.use(Vuex);
 export default new Vuex.Store({
 	state: {
 		url:"https://asia-east2-sweetbake-backend.cloudfunctions.net/api",
+		lineaccesstoken: "",
 		accessToken: "",
 		address: {
 			name: "",
@@ -16,6 +17,10 @@ export default new Vuex.Store({
 			province: "",
 			zipcode: "",
 		},
+		pickupaddress: {
+			id: "",
+			name: ""
+		},
 		profile: {
 			userId: "",
 			displayName: "",
@@ -24,7 +29,7 @@ export default new Vuex.Store({
 		},
 		round: {
 			name: "เลือกรอบส่ง",
-			id: "",
+			round_id: "",
 			type: "",
 		},
 		lockingOrder: true,
@@ -55,6 +60,12 @@ export default new Vuex.Store({
 		cart: [],
 	},
 	mutations: {
+		SET_PICKUPADDRESS(state, payload) {
+			state.pickupaddress = payload
+		},
+		SET_LINEACCESS(state, token) {
+			state.lineaccesstoken = token
+		},
 		SET_ACCESSTOKEN(state, token) {
 			state.accessToken = token
 		},

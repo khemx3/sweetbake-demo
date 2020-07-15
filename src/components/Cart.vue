@@ -44,9 +44,10 @@
 								<v-combobox
 									class="mx-2"
 									v-model="selectDropOff"
-									:items="pickup"
+									:items="pickupAddress"
 									item-text="name"
 									label="จุดส่ง"
+									@change="clickPickup"
 								></v-combobox>
 							</v-row>
 						</v-container>
@@ -68,10 +69,10 @@
 					</div>
 					<div></div>
 				</v-card>
-				<div @click="formatCart">
-					<v-btn to="/checkout" class="pa-auto mt-5">ยอดสรุป</v-btn>
-				</div>
-				
+
+				<v-btn @click="modifyCart()" class="pa-auto mt-5"
+					>ยอดสรุป</v-btn
+				>
 			</div>
 		</div>
 
@@ -112,7 +113,7 @@
 					>
 
 					<v-card-text>
-						{{ selectRound.id }}
+						{{ selectRound.round_id }}
 						{{ selectRound.name }}
 						{{ islock }}
 						<v-btn @click="lockOrder">lock </v-btn>
@@ -150,6 +151,7 @@ import axios from "@/axios";
 export default {
 	data() {
 		return {
+			pickup: this.$store.state.pickup,
 			bodyformat: "",
 			menusList: "",
 			cart: "",
@@ -157,10 +159,10 @@ export default {
 			dialog2: false,
 			isMessenger: true,
 			selectRound: this.$store.state.round,
-			selectDropOff: "",
+			selectDropOff: this.$store.state.pickupaddress,
 			row: "radio-1",
 			round: [],
-			pickup: [
+			pickupAddress: [
 				{
 					id: 1,
 					name: "jas srinakarin 10:30-11:00",
@@ -183,20 +185,78 @@ export default {
 	},
 	components: {},
 	methods: {
-		formatCart(){
-			this.bodyformat = {
-				"32tqos7of" :{  
-					[this.$store.state.menu[0].id]: this.$store.state.menu[0].count,  
-					[this.$store.state.menu[1].id]: this.$store.state.menu[1].count,
-					[this.$store.state.menu[2].id]: this.$store.state.menu[2].count,
-					"shippingCost": this.bangkokprice(),
-					"note": "-",
-					"address": this.$store.state.address
-				}
+		loginUSER(token) {
+			if (this.$store.state.accessToken == "") {
+				axios
+					.post(this.$store.state.url + "/auth/login", {
+						user_id: this.$store.state.profile.userId,
+						access_token: token,
+					})
+					.then((response) => {
+						this.$store.commit(
+							"SET_ACCESSTOKEN",
+							response.data.access_token
+						),
+							this.getRound(response.data.access_token);
+					});
 			}
-			this.modifyCart()
+		},
+		formatCart() {
+			if (this.checkMessengerRound) {
+				if (this.pickup) {
+					this.bodyformat = {
+						[this.selectRound.round_id]: {
+							[this.$store.state.menu[0].id]: this.$store.state
+								.menu[0].count,
+							[this.$store.state.menu[1].id]: this.$store.state
+								.menu[1].count,
+							[this.$store.state.menu[2].id]: this.$store.state
+								.menu[2].count,
+							shippingCost: 0,
+							note: "-",
+							address: {
+								dropoff: this.selectDropOff.name,
+							},
+						},
+					};
+				} else if (!this.pickup) {
+					this.bodyformat = {
+						[this.selectRound.round_id]: {
+							[this.$store.state.menu[0].id]: this.$store.state
+								.menu[0].count,
+							[this.$store.state.menu[1].id]: this.$store.state
+								.menu[1].count,
+							[this.$store.state.menu[2].id]: this.$store.state
+								.menu[2].count,
+							shippingCost: 0,
+							note: "-",
+							address: {
+								dropoff: this.selectDropOff.name,
+								address: this.$store.state.address,
+							},
+						},
+					};
+				}
+			} else {
+				this.bodyformat = {
+					[this.selectRound.round_id]: {
+						[this.$store.state.menu[0].id]: this.$store.state
+							.menu[0].count,
+						[this.$store.state.menu[1].id]: this.$store.state
+							.menu[1].count,
+						[this.$store.state.menu[2].id]: this.$store.state
+							.menu[2].count,
+						shippingCost: this.bangkokprice(),
+						note: "-",
+						address: {
+							address: this.$store.state.address,
+						},
+					},
+				};
+			}
+
 			// eslint-disable-next-line no-console
-			console.log(JSON.stringify(this.bodyformat))
+			console.log(this.bodyformat);
 		},
 		clearOrder() {
 			this.$store.commit("CLEAR_CART");
@@ -214,41 +274,55 @@ export default {
 			// this.$loading.show({ background: "#a68765" });
 			this.$store.commit("SET_ROUND", this.selectRound);
 			this.lockOrder();
-
+		},
+		clickPickup() {
+			this.$store.commit("SET_PICKUPADDRESS", this.selectDropOff);
 		},
 		pickUpState() {
-			// eslint-disable-next-line no-console
-			console.log("pickup");
+			this.pickup = true;
 			this.$store.commit("SET_PICKUP", true);
 		},
 		notpickUpState() {
-			// eslint-disable-next-line no-console
-			console.log("not pickup");
+			this.pickup = false;
 			this.$store.commit("SET_PICKUP", false);
 		},
 		modifyCart() {
-			axios.post(
-				this.$store.state.url + "/cart",
-				JSON.stringify(this.formatCart),
-				{
-						headers: {
-							Authorization:
-								"Bearer " + this.$store.state.accessToken ,
-							"content-type": "application/json",
-						},
-					}	
-			)
-		},
-		getRound() {	
-				axios
-				.get(this.$store.state.url +"/round",
+			this.formatCart();
+			axios
+				.post(
+					this.$store.state.url + "/cart",
+					JSON.stringify(this.bodyformat),
 					{
 						headers: {
 							Authorization:
 								"Bearer " + this.$store.state.accessToken,
+							"content-type": "application/json",
 						},
 					}
 				)
+				// eslint-disable-next-line no-console
+				.then((response) => {
+					this.$router.push({ path: "/checkout" }),
+					// eslint-disable-next-line no-console
+					console.log(response.data);
+				})
+				.catch((error) => {
+					(error) => (this.status = error.response.data.status);
+					// eslint-disable-next-line no-console
+					console.log(error.response.data);
+					// eslint-disable-next-line no-console
+					console.log(error.response.status);
+					// eslint-disable-next-line no-console
+					console.log(error.response.headers);
+				});
+		},
+		getRound(token) {
+			axios
+				.get(this.$store.state.url + "/round", {
+					headers: {
+						Authorization: "Bearer " + token,
+					},
+				})
 				// eslint-disable-next-line no-console
 				.then(
 					(response) => (
@@ -256,16 +330,14 @@ export default {
 						this.$loading.hide()
 					)
 				);
-			
-			
 		},
 		bangkokprice() {
-			if(this.checkBangkokLocation) {
-				return 75
+			if (this.checkBangkokLocation) {
+				return 75;
 			} else {
-				return 85
+				return 85;
 			}
-		}
+		},
 	},
 	computed: {
 		userAddress() {
@@ -294,8 +366,13 @@ export default {
 		},
 	},
 	created() {
-		this.$loading.show({ background: "#a68765" });
-		this.getRound();
+		// await this.$loading.show({ background: "#a68765" });
+		this.loginUSER(this.$store.state.lineaccesstoken);
+	},
+	mounted() {
+		if (!this.round.length) {
+			this.getRound(this.$store.state.accessToken);
+		}
 	},
 	// eslint-disable-next-line no-unused-vars
 	beforeRouteEnter(to, from, next) {
