@@ -52,7 +52,7 @@
 			<v-row>
 				<v-btn color="primary" to="/">แก้ไขรายการ</v-btn>
 				<v-btn color="primary" to="/cart">ย้อนกลับ</v-btn>
-				<v-btn color="primary">ยืนยันการสั่ง</v-btn>
+				<v-btn @click="test" color="primary">ยืนยันการสั่ง</v-btn>
 			</v-row>
 		</div>
 	</div>
@@ -68,6 +68,8 @@ export default {
 		};
 	},
 	methods: {
+        // eslint-disable-next-line no-console
+        test() {console.log(this.$store.state.accessToken)},
 		getCart() {
 			axios
 				.get(
@@ -75,7 +77,7 @@ export default {
 					{
 						headers: {
 							Authorization:
-								"Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiVTZjNTI0ZDJkYmU4MjE1MzJiMjIyYWQyZTU0Mjc3OWI4Iiwicm9sZXMiOiJ1c2VyIiwiaWF0IjoxNTk0NzM3MTQ1LCJleHAiOjE1OTQ4MjM1NDV9.FI6bNC9s3Lzmlj29NSDW0JQVAxbgf5Rpu3d3yUasvkU",
+								"Bearer " + this.$store.state.accessToken ,
 						},
 					}
 				)

@@ -59,19 +59,46 @@ export default {
 					alert("Error getting profile: " + error);
 				});
 		},
-		updateCart() {
+		updateCart() {},
+		login() {
+			if (this.$store.state.accessToken == "") {
+				axios
+					.post(this.$store.state.url +"/auth/login",
+						{
+							user_id: "U6c524d2dbe821532b222ad2e542779b8",
+							access_token:
+								"eyJhbGciOiJIUzI1NiJ9.GCtBASugBRNRQF2nMhRse7cF788MMouzEl0FkKzM1CiEYRW-j4B1HTnfFwR7qwBHtB3wLy8lokkpMBnYdbw9x36kwQ-wFHokrbxE_gpuFMWXD43qU4HrDw7DZ4TFs9I4.rUuTzZ_nEWOHhf74tkfaJ6-zPvSBjjvwacG7DJ9NpiA",
+						},
+						{
+							headers: {
+								"content-type": "application/json",
+							},
+						}
+					)
+					.then((response) =>
+						this.$store.commit(
+							"SET_ACCESSTOKEN",
+							response.data.access_token
+						)
+					);
+				// eslint-disable-next-line no-console
+				console.log("request token")
+			}
 			
 		},
 	},
 	updated() {
 		this.$store.commit("SET_LINEUSER", this.profile);
 	},
-	mounted() {},
+	mounted() {
+		this.login();
+	},
 	// eslint-disable-next-line no-unused-vars
 	beforeRouteLeave(to, from, next) {
 		// eslint-disable-next-line no-console
 		if (to.name == "cart") {
 			this.updateCart();
+			// eslint-disable-next-line no-console
 		}
 		next(true);
 	},

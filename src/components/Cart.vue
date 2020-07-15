@@ -19,7 +19,7 @@
 					></v-combobox>
 				</v-row>
 			</v-container>
-			
+
 			<div></div>
 			<div v-if="islock">
 				<v-card>
@@ -54,20 +54,24 @@
 					<div v-if="!isPickUp" class="mx-auto">
 						<v-btn to="/address" class="ma-5 px-10">ที่อยู่</v-btn>
 						<div class="mx-5">
-							<p>{{ userAddress.name }} {{ userAddress.contact }}</p>
-						<p>
-							{{ userAddress.address1 }}
-							{{ userAddress.district }} {{ userAddress.amphoe }}
-							{{ userAddress.province }}
-							{{ userAddress.zipcode }}
-						</p>
+							<p>
+								{{ userAddress.name }} {{ userAddress.contact }}
+							</p>
+							<p>
+								{{ userAddress.address1 }}
+								{{ userAddress.district }}
+								{{ userAddress.amphoe }}
+								{{ userAddress.province }}
+								{{ userAddress.zipcode }}
+							</p>
 						</div>
-						
-						<div v-if="checkBangkokLocation">Bangkok send</div>
 					</div>
 					<div></div>
 				</v-card>
-				<v-btn  to="/checkout" class="pa-auto mt-5">ยอดสรุป</v-btn>
+				<div @click="formatCart">
+					<v-btn to="/checkout" class="pa-auto mt-5">ยอดสรุป</v-btn>
+				</div>
+				
 			</div>
 		</div>
 
@@ -146,6 +150,7 @@ import axios from "@/axios";
 export default {
 	data() {
 		return {
+			bodyformat: "",
 			menusList: "",
 			cart: "",
 			dialog: false,
@@ -178,6 +183,21 @@ export default {
 	},
 	components: {},
 	methods: {
+		formatCart(){
+			this.bodyformat = {
+				"32tqos7of" :{  
+					[this.$store.state.menu[0].id]: this.$store.state.menu[0].count,  
+					[this.$store.state.menu[1].id]: this.$store.state.menu[1].count,
+					[this.$store.state.menu[2].id]: this.$store.state.menu[2].count,
+					"shippingCost": this.bangkokprice(),
+					"note": "-",
+					"address": this.$store.state.address
+				}
+			}
+			this.modifyCart()
+			// eslint-disable-next-line no-console
+			console.log(JSON.stringify(this.bodyformat))
+		},
 		clearOrder() {
 			this.$store.commit("CLEAR_CART");
 			this.dialog = false;
@@ -194,7 +214,7 @@ export default {
 			// this.$loading.show({ background: "#a68765" });
 			this.$store.commit("SET_ROUND", this.selectRound);
 			this.lockOrder();
-		
+
 		},
 		pickUpState() {
 			// eslint-disable-next-line no-console
@@ -206,16 +226,26 @@ export default {
 			console.log("not pickup");
 			this.$store.commit("SET_PICKUP", false);
 		},
-		modifyCart() {},
-		getRound() {
-			axios
-				.get(
-					"https://asia-east2-sweetbake-backend.cloudfunctions.net/api/round/",
+		modifyCart() {
+			axios.post(
+				this.$store.state.url + "/cart",
+				JSON.stringify(this.formatCart),
+				{
+						headers: {
+							Authorization:
+								"Bearer " + this.$store.state.accessToken ,
+							"content-type": "application/json",
+						},
+					}	
+			)
+		},
+		getRound() {	
+				axios
+				.get(this.$store.state.url +"/round",
 					{
 						headers: {
-							"Content-Type": "application/json",
 							Authorization:
-								"Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiYWRtaW4iLCJyb2xlcyI6ImFkbWluIiwiaWF0IjoxNTk0NzM3MDU1LCJleHAiOjE1OTQ4MjM0NTV9.yMm3XjLjMfRjfB2VP2z_CsDTV-tdIE_ACofh_iu16bY",
+								"Bearer " + this.$store.state.accessToken,
 						},
 					}
 				)
@@ -226,7 +256,16 @@ export default {
 						this.$loading.hide()
 					)
 				);
+			
+			
 		},
+		bangkokprice() {
+			if(this.checkBangkokLocation) {
+				return 75
+			} else {
+				return 85
+			}
+		}
 	},
 	computed: {
 		userAddress() {

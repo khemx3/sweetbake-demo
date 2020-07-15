@@ -74,7 +74,6 @@
 	</div>
 </template>
 <script>
-// import { mapState } from 'Vuex'
 
 export default {
 	name: "OrderCard",

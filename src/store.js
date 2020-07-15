@@ -5,6 +5,8 @@ Vue.use(Vuex);
 
 export default new Vuex.Store({
 	state: {
+		url:"https://asia-east2-sweetbake-backend.cloudfunctions.net/api",
+		accessToken: "",
 		address: {
 			name: "",
 			contact: "",
@@ -25,7 +27,7 @@ export default new Vuex.Store({
 			id: "",
 			type: "",
 		},
-		lockingOrder: false,
+		lockingOrder: true,
 		pickup: false,
 		menu: [
 			{
@@ -53,6 +55,9 @@ export default new Vuex.Store({
 		cart: [],
 	},
 	mutations: {
+		SET_ACCESSTOKEN(state, token) {
+			state.accessToken = token
+		},
 		SET_ROUND(state, payload) {
 			state.round = payload
 		},
