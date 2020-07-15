@@ -122,6 +122,25 @@ export default {
 				zipcode: this.zipcode
 			});
 		},
+		clearAddress() {
+			
+			this.name="",
+			this.contact="",
+			this.address1="",
+			this.district="",
+			this.amphoe="",
+			this.province="",
+			this.zipcode="",
+			this.$store.commit("SET_ADDRESS", {
+				name: "",
+				contact: "",
+				address1: "",
+				district: "",
+				amphoe: "",
+				province: "",
+				zipcode: "",
+			});
+		},
 		getDataAddress() {
 			this.dataAddress = this.$store.state.address
 		}

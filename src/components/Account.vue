@@ -1,5 +1,10 @@
 <template>
 	<div>
+		<div class="pt-2">
+			<v-img
+				src="https://www.img.in.th/images/c7dd9b80e43949d3d261e8e78a203fff.jpg"
+			></v-img>
+		</div>
 		<div>
 			<v-container fluid>
 				<v-layout column>
